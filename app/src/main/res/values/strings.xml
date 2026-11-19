@@ -11,4 +11,10 @@
     <string name="option_b">Option B</string>
     <string name="option_c">Option C</string>
     <string name="option_d">Option D</string>
+    <string name="title_earthquake_quiz">Earthquake Quiz</string>
+    <string name="hint_enter_name">Enter Your Name</string>
+    <string name="hint_enter_phone">Enter Your Phone Number</string>
+    <string name="button_start_quiz">Start Quiz</string>
+    <string name="button_past_attempts">Past Attempts</string>
+    <string name="button_exit">Exit</string>
 </resources>
