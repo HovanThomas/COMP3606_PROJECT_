@@ -20,23 +20,23 @@ public class Question4Activity extends AppCompatActivity {
     private CountDownTimer countDownTimer;
     private boolean isAnswered = false;
 
-    // Question 4 Correct Answer: C
-    private static final String CORRECT_ANSWER = "C";
+    private static final String CORRECT_ANSWER = "B";
+    private static final String FEEDBACK_CORRECT = "Correct! Drop to your knees, Cover under a sturdy desk/table, and Hold On until shaking stops.";
+    private static final String FEEDBACK_INCORRECT = "Incorrect! Correct answer was B) Drop, Cover, and Hold On.";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_q4); // Uses the activity_q4.xml layout
+        setContentView(R.layout.activity_q4);
 
-        // 1. Retrieve information passed from previous intent (Question3Activity)
         Intent incomingIntent = getIntent();
         playerName = incomingIntent.getStringExtra("PLAYER_NAME");
         playerPhone = incomingIntent.getStringExtra("PLAYER_PHONE");
         currentScore = incomingIntent.getIntExtra("CURRENT_SCORE", 0);
 
-        // 2. Initialize Views
         TextView tvPlayerInfo = findViewById(R.id.tvProgress);
         TextView tvScore = findViewById(R.id.tvScore);
+        TextView tvQuestion = findViewById(R.id.tvQuestion);
         tvSmsFeedback = findViewById(R.id.tvSmsFeedback);
         timerProgressBar = findViewById(R.id.timerProgressBar);
 
@@ -45,25 +45,22 @@ public class Question4Activity extends AppCompatActivity {
         Button btnOptionC = findViewById(R.id.btnOptionC);
         Button btnOptionD = findViewById(R.id.btnOptionD);
 
-        // 3. Configure layout for Multiple-Choice Question
-        btnOptionA.setText(R.string.option_a);
-        btnOptionB.setText(R.string.option_b);
-        btnOptionC.setText(R.string.option_c);
-        btnOptionD.setText(R.string.option_d);
+        tvPlayerInfo.setText(getString(R.string.player_info_q4, playerName != null ? playerName : ""));
+        tvScore.setText(getString(R.string.score_fmt, currentScore));
+        tvQuestion.setText("What is the officially recommended immediate action when earthquake shaking begins indoors?");
+
+        btnOptionA.setText("A) Run outside");
+        btnOptionB.setText("B) Drop, Cover, and Hold On");
+        btnOptionC.setText("C) Stand in doorway");
+        btnOptionD.setText("D) Use elevator");
 
         btnOptionA.setVisibility(View.VISIBLE);
         btnOptionB.setVisibility(View.VISIBLE);
         btnOptionC.setVisibility(View.VISIBLE);
         btnOptionD.setVisibility(View.VISIBLE);
 
-        // 4. Populate Question 4 Details
-        tvPlayerInfo.setText(getString(R.string.player_info_q4, playerName));
-        tvScore.setText(getString(R.string.score_fmt, currentScore));
-
-        // 5. Start 15-second Countdown Timer
         startQuestionTimer();
 
-        // 6. Button Click Listeners
         btnOptionA.setOnClickListener(v -> processAnswer("A"));
         btnOptionB.setOnClickListener(v -> processAnswer("B"));
         btnOptionC.setOnClickListener(v -> processAnswer("C"));
@@ -98,13 +95,13 @@ public class Question4Activity extends AppCompatActivity {
         }
         if (selectedOption.equalsIgnoreCase(CORRECT_ANSWER)) {
             currentScore += 10;
-            tvSmsFeedback.setText(R.string.sms_correct);
+            tvSmsFeedback.setText(FEEDBACK_CORRECT);
             Toast.makeText(this, R.string.correct_answer, Toast.LENGTH_SHORT).show();
         } else {
-            tvSmsFeedback.setText(getString(R.string.sms_incorrect, CORRECT_ANSWER));
+            tvSmsFeedback.setText(FEEDBACK_INCORRECT);
             Toast.makeText(this, R.string.incorrect_answer, Toast.LENGTH_SHORT).show();
         }
-        tvSmsFeedback.postDelayed(this::navigateToNextQuestion, 1500);
+        tvSmsFeedback.postDelayed(this::navigateToNextQuestion, 5000);
     }
 
     private void navigateToNextQuestion() {

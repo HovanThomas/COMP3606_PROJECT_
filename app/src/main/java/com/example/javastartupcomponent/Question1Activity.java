@@ -19,23 +19,23 @@ public class Question1Activity extends AppCompatActivity {
     private CountDownTimer countDownTimer;
     private boolean isAnswered = false;
 
-    // Question 1 Correct Answer: B (Water & Flashlight)
     private static final String CORRECT_ANSWER = "B";
+    private static final String FEEDBACK_CORRECT = "Correct! Clean water (1 gal/person/day) and a working flashlight are essential emergency kit items.";
+    private static final String FEEDBACK_INCORRECT = "Incorrect! Correct answer was B) Water & Flashlight.";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_q1); // Uses the activity_q1.xml layout
+        setContentView(R.layout.activity_q1);
 
-        // 1. Retrieve Intent Extras passed from MainActivity
         Intent incomingIntent = getIntent();
         playerName = incomingIntent.getStringExtra("PLAYER_NAME");
         playerPhone = incomingIntent.getStringExtra("PLAYER_PHONE");
         currentScore = incomingIntent.getIntExtra("CURRENT_SCORE", 0);
 
-        // 2. Initialize Views
         TextView tvPlayerInfo = findViewById(R.id.tvProgress);
         TextView tvScore = findViewById(R.id.tvScore);
+        TextView tvQuestion = findViewById(R.id.tvQuestion);
         tvSmsFeedback = findViewById(R.id.tvSmsFeedback);
         timerProgressBar = findViewById(R.id.timerProgressBar);
 
@@ -44,14 +44,17 @@ public class Question1Activity extends AppCompatActivity {
         Button btnOptionC = findViewById(R.id.btnOptionC);
         Button btnOptionD = findViewById(R.id.btnOptionD);
 
-        // 3. Populate Isolated Question 1 Details
-        tvPlayerInfo.setText(getString(R.string.player_info, playerName));
+        tvPlayerInfo.setText(getString(R.string.player_info_q1, playerName != null ? playerName : ""));
         tvScore.setText(getString(R.string.score_fmt, currentScore));
+        tvQuestion.setText("What is the most critical item to include in your emergency supply kit?");
 
-        // 4. Start 15-second Countdown Timer
+        btnOptionA.setText("A) TV");
+        btnOptionB.setText("B) Water & Flashlight");
+        btnOptionC.setText("C) Books");
+        btnOptionD.setText("D) Glassware");
+
         startQuestionTimer();
 
-        // 5. Button Click Listeners
         btnOptionA.setOnClickListener(v -> processAnswer("A"));
         btnOptionB.setOnClickListener(v -> processAnswer("B"));
         btnOptionC.setOnClickListener(v -> processAnswer("C"));
@@ -73,7 +76,6 @@ public class Question1Activity extends AppCompatActivity {
                     isAnswered = true;
                     Toast.makeText(Question1Activity.this, R.string.time_expired, Toast.LENGTH_SHORT).show();
                     navigateToNextQuestion();
-                    // Proceed even if time expires
                 }
             }
         }.start();
@@ -84,31 +86,25 @@ public class Question1Activity extends AppCompatActivity {
         isAnswered = true;
         if (countDownTimer != null) {
             countDownTimer.cancel();
-            // Stop timer on submission
         }
         if (selectedOption.equalsIgnoreCase(CORRECT_ANSWER)) {
             currentScore += 10;
-            tvSmsFeedback.setText(R.string.sms_correct);
+            tvSmsFeedback.setText(FEEDBACK_CORRECT);
             Toast.makeText(this, R.string.correct_answer, Toast.LENGTH_SHORT).show();
         } else {
-            tvSmsFeedback.setText(getString(R.string.sms_incorrect, CORRECT_ANSWER));
+            tvSmsFeedback.setText(FEEDBACK_INCORRECT);
             Toast.makeText(this, R.string.incorrect_answer, Toast.LENGTH_SHORT).show();
         }
-        // Delay briefly so user reads feedback, then move to next isolated question
-        tvSmsFeedback.postDelayed(this::navigateToNextQuestion, 1500);
+        tvSmsFeedback.postDelayed(this::navigateToNextQuestion, 5000);
     }
 
     private void navigateToNextQuestion() {
-        // Explicit Intent launching Question2Activity
         Intent intent = new Intent(Question1Activity.this, Question2Activity.class);
         intent.putExtra("PLAYER_NAME", playerName);
         intent.putExtra("PLAYER_PHONE", playerPhone);
         intent.putExtra("CURRENT_SCORE", currentScore);
-        // Pass accumulated score
         startActivity(intent);
-
         finish();
-        // Destroy Question1Activity so user cannot press hardware Back to re-answer
     }
 
     @Override

@@ -20,23 +20,23 @@ public class Question2Activity extends AppCompatActivity {
     private CountDownTimer countDownTimer;
     private boolean isAnswered = false;
 
-    // Question 2 Correct Answer (True/False question)
     private static final String CORRECT_ANSWER = "TRUE";
+    private static final String FEEDBACK_CORRECT = "Correct! Securing heavy furniture prevents tipping injuries during severe ground shaking.";
+    private static final String FEEDBACK_INCORRECT = "Incorrect! Correct answer was TRUE.";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_q2); // Uses the activity_q2.xml layout
+        setContentView(R.layout.activity_q2);
 
-        // 1. Retrieve information from previous intent (Question1)
         Intent incomingIntent = getIntent();
         playerName = incomingIntent.getStringExtra("PLAYER_NAME");
         playerPhone = incomingIntent.getStringExtra("PLAYER_PHONE");
         currentScore = incomingIntent.getIntExtra("CURRENT_SCORE", 0);
 
-        // 2. Initialize Views
         TextView tvPlayerInfo = findViewById(R.id.tvProgress);
         TextView tvScore = findViewById(R.id.tvScore);
+        TextView tvQuestion = findViewById(R.id.tvQuestion);
         tvSmsFeedback = findViewById(R.id.tvSmsFeedback);
         timerProgressBar = findViewById(R.id.timerProgressBar);
 
@@ -45,20 +45,17 @@ public class Question2Activity extends AppCompatActivity {
         Button btnOptionC = findViewById(R.id.btnOptionC);
         Button btnOptionD = findViewById(R.id.btnOptionD);
 
-        // 3. Configure layout for True / False question
-        btnOptionA.setText(R.string.option_true);
-        btnOptionB.setText(R.string.option_false);
+        tvPlayerInfo.setText(getString(R.string.player_info_q2, playerName != null ? playerName : ""));
+        tvScore.setText(getString(R.string.score_fmt, currentScore));
+        tvQuestion.setText("True or False: Heavy tall furniture and bookcases should be anchored securely to wall studs.");
+
+        btnOptionA.setText("TRUE");
+        btnOptionB.setText("FALSE");
         btnOptionC.setVisibility(View.GONE);
         btnOptionD.setVisibility(View.GONE);
 
-        // 4. Populate Question 2 Details
-        tvPlayerInfo.setText(getString(R.string.player_info_q2, playerName));
-        tvScore.setText(getString(R.string.score_fmt, currentScore));
-
-        // 5. Start 15-second Countdown Timer
         startQuestionTimer();
 
-        // 6. Button Click Listeners for True/False
         btnOptionA.setOnClickListener(v -> processAnswer("TRUE"));
         btnOptionB.setOnClickListener(v -> processAnswer("FALSE"));
     }
@@ -91,13 +88,13 @@ public class Question2Activity extends AppCompatActivity {
         }
         if (selectedOption.equalsIgnoreCase(CORRECT_ANSWER)) {
             currentScore += 10;
-            tvSmsFeedback.setText(R.string.sms_correct);
+            tvSmsFeedback.setText(FEEDBACK_CORRECT);
             Toast.makeText(this, R.string.correct_answer, Toast.LENGTH_SHORT).show();
         } else {
-            tvSmsFeedback.setText(getString(R.string.sms_incorrect, CORRECT_ANSWER));
+            tvSmsFeedback.setText(FEEDBACK_INCORRECT);
             Toast.makeText(this, R.string.incorrect_answer, Toast.LENGTH_SHORT).show();
         }
-        tvSmsFeedback.postDelayed(this::navigateToNextQuestion, 1500);
+        tvSmsFeedback.postDelayed(this::navigateToNextQuestion, 5000);
     }
 
     private void navigateToNextQuestion() {

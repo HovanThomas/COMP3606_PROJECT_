@@ -3,60 +3,94 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tvProgress"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp" />
+        android:orientation="horizontal"
+        android:weightSum="2">
 
-    <TextView
-        android:id="@+id/tvScore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp" />
+        <TextView
+            android:id="@+id/tvProgress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvScore"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/timerProgressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="8dp"
         android:layout_marginTop="8dp" />
 
     <TextView
-        android:id="@+id/tvSmsFeedback"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvQuestion"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:textSize="16sp" />
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvSmsFeedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textColor="#2E7D32"
+        android:textSize="14sp"
+        android:textStyle="italic" />
 
     <Button
         android:id="@+id/btnOptionA"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/option_a" />
+        android:textAlignment="textStart"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp" />
 
     <Button
         android:id="@+id/btnOptionB"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/option_b" />
+        android:textAlignment="textStart"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp" />
 
     <Button
         android:id="@+id/btnOptionC"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/option_c" />
+        android:textAlignment="textStart"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp" />
 
     <Button
         android:id="@+id/btnOptionD"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/option_d" />
+        android:textAlignment="textStart"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp" />
 
 </LinearLayout>
