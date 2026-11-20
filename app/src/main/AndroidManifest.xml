@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-feature android:name="android.hardware.telephony" android:required="false" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,7 +15,7 @@
         android:theme="@style/Theme.JavaStartupComponent">
 
         <activity
-            android:name=".Question1"
+            android:name=".mainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,9 +24,12 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".welcomeActivity" />
         <activity android:name=".Question1Activity" />
         <activity android:name=".Question2Activity" />
         <activity android:name=".Question3Activity" />
+        <activity android:name=".Question4Activity" />
+        <activity android:name=".Question5Activity" />
         <activity android:name=".SummaryActivity" />
 
     </application>

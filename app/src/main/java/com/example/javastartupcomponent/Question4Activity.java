@@ -3,6 +3,7 @@ package com.example.javastartupcomponent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -10,7 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class Question1 extends AppCompatActivity {
+public class Question4Activity extends AppCompatActivity {
     private TextView tvSmsFeedback;
     private ProgressBar timerProgressBar;
     private String playerName;
@@ -19,15 +20,15 @@ public class Question1 extends AppCompatActivity {
     private CountDownTimer countDownTimer;
     private boolean isAnswered = false;
 
-    // Question 1 Correct Answer: B (Water & Flashlight)
-    private static final String CORRECT_ANSWER = "B";
+    // Question 4 Correct Answer: C
+    private static final String CORRECT_ANSWER = "C";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game); // Uses the activity_game.xml layout
+        setContentView(R.layout.activity_q4); // Uses the activity_q4.xml layout
 
-        // 1. Retrieve Intent Extras passed from MainActivity
+        // 1. Retrieve information passed from previous intent (Question3Activity)
         Intent incomingIntent = getIntent();
         playerName = incomingIntent.getStringExtra("PLAYER_NAME");
         playerPhone = incomingIntent.getStringExtra("PLAYER_PHONE");
@@ -44,14 +45,25 @@ public class Question1 extends AppCompatActivity {
         Button btnOptionC = findViewById(R.id.btnOptionC);
         Button btnOptionD = findViewById(R.id.btnOptionD);
 
-        // 3. Populate Isolated Question 1 Details
-        tvPlayerInfo.setText(getString(R.string.player_info, playerName));
+        // 3. Configure layout for Multiple-Choice Question
+        btnOptionA.setText(R.string.option_a);
+        btnOptionB.setText(R.string.option_b);
+        btnOptionC.setText(R.string.option_c);
+        btnOptionD.setText(R.string.option_d);
+
+        btnOptionA.setVisibility(View.VISIBLE);
+        btnOptionB.setVisibility(View.VISIBLE);
+        btnOptionC.setVisibility(View.VISIBLE);
+        btnOptionD.setVisibility(View.VISIBLE);
+
+        // 4. Populate Question 4 Details
+        tvPlayerInfo.setText(getString(R.string.player_info_q4, playerName));
         tvScore.setText(getString(R.string.score_fmt, currentScore));
 
-        // 4. Start 15-second Countdown Timer
+        // 5. Start 15-second Countdown Timer
         startQuestionTimer();
 
-        // 5. Button Click Listeners
+        // 6. Button Click Listeners
         btnOptionA.setOnClickListener(v -> processAnswer("A"));
         btnOptionB.setOnClickListener(v -> processAnswer("B"));
         btnOptionC.setOnClickListener(v -> processAnswer("C"));
@@ -71,9 +83,8 @@ public class Question1 extends AppCompatActivity {
             public void onFinish() {
                 if (!isAnswered) {
                     isAnswered = true;
-                    Toast.makeText(Question1.this, R.string.time_expired, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Question4Activity.this, R.string.time_expired_q4, Toast.LENGTH_SHORT).show();
                     navigateToNextQuestion();
-                    // Proceed even if time expires
                 }
             }
         }.start();
@@ -84,7 +95,6 @@ public class Question1 extends AppCompatActivity {
         isAnswered = true;
         if (countDownTimer != null) {
             countDownTimer.cancel();
-            // Stop timer on submission
         }
         if (selectedOption.equalsIgnoreCase(CORRECT_ANSWER)) {
             currentScore += 10;
@@ -94,21 +104,16 @@ public class Question1 extends AppCompatActivity {
             tvSmsFeedback.setText(getString(R.string.sms_incorrect, CORRECT_ANSWER));
             Toast.makeText(this, R.string.incorrect_answer, Toast.LENGTH_SHORT).show();
         }
-        // Delay briefly so user reads feedback, then move to next isolated question
         tvSmsFeedback.postDelayed(this::navigateToNextQuestion, 1500);
     }
 
     private void navigateToNextQuestion() {
-        // Explicit Intent launching Question2Activity
-        Intent intent = new Intent(Question1.this, Question2Activity.class);
+        Intent intent = new Intent(Question4Activity.this, Question5Activity.class);
         intent.putExtra("PLAYER_NAME", playerName);
         intent.putExtra("PLAYER_PHONE", playerPhone);
         intent.putExtra("CURRENT_SCORE", currentScore);
-        // Pass accumulated score
         startActivity(intent);
-
         finish();
-        // Destroy Question1Activity so user cannot press hardware Back to re-answer
     }
 
     @Override

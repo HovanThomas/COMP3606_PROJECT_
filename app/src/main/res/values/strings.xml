@@ -1,16 +1,24 @@
 <resources>
     <string name="app_name">Java Startup Component</string>
     <string name="player_info">Q1 of 10 | Player: %1$s</string>
+    <string name="player_info_q2">Q2 of 10 | Player: %1$s</string>
+    <string name="player_info_q3">Q3 of 10 | Player: %1$s</string>
+    <string name="player_info_q4">Q4 of 10 | Player: %1$s</string>
     <string name="score_fmt">Score: %1$d</string>
     <string name="sms_correct">SMS Status: Correct! +10 Points</string>
     <string name="sms_incorrect">SMS Status: Incorrect! Correct answer was %1$s</string>
     <string name="time_expired">Time Expired for Q1!</string>
+    <string name="time_expired_q2">Time Expired for Q2!</string>
+    <string name="time_expired_q3">Time Expired for Q3!</string>
+    <string name="time_expired_q4">Time Expired for Q4!</string>
     <string name="correct_answer">Correct Answer!</string>
     <string name="incorrect_answer">Incorrect!</string>
     <string name="option_a">Option A</string>
     <string name="option_b">Option B</string>
     <string name="option_c">Option C</string>
     <string name="option_d">Option D</string>
+    <string name="option_true">True</string>
+    <string name="option_false">False</string>
     <string name="title_earthquake_quiz">Earthquake Quiz</string>
     <string name="hint_enter_name">Enter Your Name</string>
     <string name="hint_enter_phone">Enter Your Phone Number</string>
