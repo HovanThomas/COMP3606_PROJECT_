@@ -1,6 +1,8 @@
 package com.example.javastartupcomponent;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -19,6 +21,8 @@ public class Question2Activity extends AppCompatActivity {
     private int currentScore;
     private CountDownTimer countDownTimer;
     private boolean isAnswered = false;
+
+    private Button btnOptionA, btnOptionB, btnOptionC, btnOptionD;
 
     private static final String CORRECT_ANSWER = "TRUE";
     private static final String FEEDBACK_CORRECT = "Correct! Securing heavy furniture prevents tipping injuries during severe ground shaking.";
@@ -40,10 +44,10 @@ public class Question2Activity extends AppCompatActivity {
         tvSmsFeedback = findViewById(R.id.tvSmsFeedback);
         timerProgressBar = findViewById(R.id.timerProgressBar);
 
-        Button btnOptionA = findViewById(R.id.btnOptionA);
-        Button btnOptionB = findViewById(R.id.btnOptionB);
-        Button btnOptionC = findViewById(R.id.btnOptionC);
-        Button btnOptionD = findViewById(R.id.btnOptionD);
+        btnOptionA = findViewById(R.id.btnOptionA);
+        btnOptionB = findViewById(R.id.btnOptionB);
+        btnOptionC = findViewById(R.id.btnOptionC);
+        btnOptionD = findViewById(R.id.btnOptionD);
 
         tvPlayerInfo.setText(getString(R.string.player_info_q2, playerName != null ? playerName : ""));
         tvScore.setText(getString(R.string.score_fmt, currentScore));
@@ -56,8 +60,8 @@ public class Question2Activity extends AppCompatActivity {
 
         startQuestionTimer();
 
-        btnOptionA.setOnClickListener(v -> processAnswer("TRUE"));
-        btnOptionB.setOnClickListener(v -> processAnswer("FALSE"));
+        btnOptionA.setOnClickListener(v -> processAnswer("TRUE", btnOptionA));
+        btnOptionB.setOnClickListener(v -> processAnswer("FALSE", btnOptionB));
     }
 
     private void startQuestionTimer() {
@@ -73,28 +77,70 @@ public class Question2Activity extends AppCompatActivity {
             public void onFinish() {
                 if (!isAnswered) {
                     isAnswered = true;
+                    highlightCorrectOnly();
+                    tvSmsFeedback.setText("Time Expired! " + FEEDBACK_INCORRECT);
                     Toast.makeText(Question2Activity.this, R.string.time_expired_q2, Toast.LENGTH_SHORT).show();
-                    navigateToNextQuestion();
+                    tvSmsFeedback.postDelayed(Question2Activity.this::navigateToNextQuestion, 5000);
                 }
             }
         }.start();
     }
 
-    private void processAnswer(String selectedOption) {
+    private void processAnswer(String selectedOption, Button clickedButton) {
         if (isAnswered) return;
         isAnswered = true;
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
+
+        disableAllButtons();
         if (selectedOption.equalsIgnoreCase(CORRECT_ANSWER)) {
             currentScore += 10;
+            clickedButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#4CAF50")));
             tvSmsFeedback.setText(FEEDBACK_CORRECT);
             Toast.makeText(this, R.string.correct_answer, Toast.LENGTH_SHORT).show();
         } else {
+            clickedButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F44336")));
+            Button correctBtn = getCorrectButton();
+            if (correctBtn != null) {
+                correctBtn.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#4CAF50")));
+            }
             tvSmsFeedback.setText(FEEDBACK_INCORRECT);
             Toast.makeText(this, R.string.incorrect_answer, Toast.LENGTH_SHORT).show();
         }
         tvSmsFeedback.postDelayed(this::navigateToNextQuestion, 5000);
+    }
+
+    private void highlightCorrectOnly() {
+        disableAllButtons();
+        Button correctBtn = getCorrectButton();
+        if (correctBtn != null) {
+            correctBtn.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#4CAF50")));
+        }
+    }
+
+    private void disableAllButtons() {
+        if (btnOptionA != null) btnOptionA.setEnabled(false);
+        if (btnOptionB != null) btnOptionB.setEnabled(false);
+        if (btnOptionC != null) btnOptionC.setEnabled(false);
+        if (btnOptionD != null) btnOptionD.setEnabled(false);
+    }
+
+    private Button getCorrectButton() {
+        switch (CORRECT_ANSWER.toUpperCase()) {
+            case "A":
+            case "TRUE":
+                return btnOptionA;
+            case "B":
+            case "FALSE":
+                return btnOptionB;
+            case "C":
+                return btnOptionC;
+            case "D":
+                return btnOptionD;
+            default:
+                return null;
+        }
     }
 
     private void navigateToNextQuestion() {

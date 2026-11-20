@@ -1,6 +1,8 @@
 package com.example.javastartupcomponent;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.widget.Button;
@@ -18,6 +20,8 @@ public class Question1Activity extends AppCompatActivity {
     private int currentScore;
     private CountDownTimer countDownTimer;
     private boolean isAnswered = false;
+
+    private Button btnOptionA, btnOptionB, btnOptionC, btnOptionD;
 
     private static final String CORRECT_ANSWER = "B";
     private static final String FEEDBACK_CORRECT = "Correct! Clean water (1 gal/person/day) and a working flashlight are essential emergency kit items.";
@@ -39,10 +43,10 @@ public class Question1Activity extends AppCompatActivity {
         tvSmsFeedback = findViewById(R.id.tvSmsFeedback);
         timerProgressBar = findViewById(R.id.timerProgressBar);
 
-        Button btnOptionA = findViewById(R.id.btnOptionA);
-        Button btnOptionB = findViewById(R.id.btnOptionB);
-        Button btnOptionC = findViewById(R.id.btnOptionC);
-        Button btnOptionD = findViewById(R.id.btnOptionD);
+        btnOptionA = findViewById(R.id.btnOptionA);
+        btnOptionB = findViewById(R.id.btnOptionB);
+        btnOptionC = findViewById(R.id.btnOptionC);
+        btnOptionD = findViewById(R.id.btnOptionD);
 
         tvPlayerInfo.setText(getString(R.string.player_info_q1, playerName != null ? playerName : ""));
         tvScore.setText(getString(R.string.score_fmt, currentScore));
@@ -55,10 +59,10 @@ public class Question1Activity extends AppCompatActivity {
 
         startQuestionTimer();
 
-        btnOptionA.setOnClickListener(v -> processAnswer("A"));
-        btnOptionB.setOnClickListener(v -> processAnswer("B"));
-        btnOptionC.setOnClickListener(v -> processAnswer("C"));
-        btnOptionD.setOnClickListener(v -> processAnswer("D"));
+        btnOptionA.setOnClickListener(v -> processAnswer("A", btnOptionA));
+        btnOptionB.setOnClickListener(v -> processAnswer("B", btnOptionB));
+        btnOptionC.setOnClickListener(v -> processAnswer("C", btnOptionC));
+        btnOptionD.setOnClickListener(v -> processAnswer("D", btnOptionD));
     }
 
     private void startQuestionTimer() {
@@ -74,28 +78,70 @@ public class Question1Activity extends AppCompatActivity {
             public void onFinish() {
                 if (!isAnswered) {
                     isAnswered = true;
+                    highlightCorrectOnly();
+                    tvSmsFeedback.setText("Time Expired! " + FEEDBACK_INCORRECT);
                     Toast.makeText(Question1Activity.this, R.string.time_expired, Toast.LENGTH_SHORT).show();
-                    navigateToNextQuestion();
+                    tvSmsFeedback.postDelayed(Question1Activity.this::navigateToNextQuestion, 5000);
                 }
             }
         }.start();
     }
 
-    private void processAnswer(String selectedOption) {
+    private void processAnswer(String selectedOption, Button clickedButton) {
         if (isAnswered) return;
         isAnswered = true;
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
+
+        disableAllButtons();
         if (selectedOption.equalsIgnoreCase(CORRECT_ANSWER)) {
             currentScore += 10;
+            clickedButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#4CAF50")));
             tvSmsFeedback.setText(FEEDBACK_CORRECT);
             Toast.makeText(this, R.string.correct_answer, Toast.LENGTH_SHORT).show();
         } else {
+            clickedButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F44336")));
+            Button correctBtn = getCorrectButton();
+            if (correctBtn != null) {
+                correctBtn.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#4CAF50")));
+            }
             tvSmsFeedback.setText(FEEDBACK_INCORRECT);
             Toast.makeText(this, R.string.incorrect_answer, Toast.LENGTH_SHORT).show();
         }
         tvSmsFeedback.postDelayed(this::navigateToNextQuestion, 5000);
+    }
+
+    private void highlightCorrectOnly() {
+        disableAllButtons();
+        Button correctBtn = getCorrectButton();
+        if (correctBtn != null) {
+            correctBtn.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#4CAF50")));
+        }
+    }
+
+    private void disableAllButtons() {
+        if (btnOptionA != null) btnOptionA.setEnabled(false);
+        if (btnOptionB != null) btnOptionB.setEnabled(false);
+        if (btnOptionC != null) btnOptionC.setEnabled(false);
+        if (btnOptionD != null) btnOptionD.setEnabled(false);
+    }
+
+    private Button getCorrectButton() {
+        switch (CORRECT_ANSWER.toUpperCase()) {
+            case "A":
+            case "TRUE":
+                return btnOptionA;
+            case "B":
+            case "FALSE":
+                return btnOptionB;
+            case "C":
+                return btnOptionC;
+            case "D":
+                return btnOptionD;
+            default:
+                return null;
+        }
     }
 
     private void navigateToNextQuestion() {
