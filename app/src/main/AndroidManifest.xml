@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-feature android:name="android.hardware.telephony" android:required="false" />
 
     <application
@@ -28,6 +29,7 @@
         <activity android:name=".Question1Activity" />
         <activity android:name=".Question2Activity" />
         <activity android:name=".Question3Activity" />
+        <activity android:name=".SummaryActivity" />
         <activity android:name=".Question4Activity" />
         <activity android:name=".Question5Activity" />
         <activity android:name=".Question6Activity" />
@@ -35,8 +37,16 @@
         <activity android:name=".Question8Activity" />
         <activity android:name=".Question9Activity" />
         <activity android:name=".Question10Activity" />
-        <activity android:name=".SummaryActivity" />
         <activity android:name=".PastAttemptsActivity" />
+
+        <receiver
+            android:name=".SmsReceiver"
+            android:permission="android.permission.BROADCAST_SMS"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
 
     </application>
 
