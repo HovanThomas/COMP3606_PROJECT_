@@ -16,6 +16,8 @@ public class mainActivity extends AppCompatActivity {
         EditText name = findViewById(R.id.playerName);
         EditText phone = findViewById(R.id.playerNumber);
         Button btn_next = findViewById(R.id.buttonStart);
+        Button btnPastAttempts = findViewById(R.id.buttonPastAttempts);
+        Button btnExit = findViewById(R.id.buttonExit);
 
         btn_next.setOnClickListener(v -> {
             String playerNameStr = name.getText().toString();
@@ -30,5 +32,12 @@ public class mainActivity extends AppCompatActivity {
             i.putExtra("CURRENT_SCORE", 0);
             startActivity(i);
         });
+
+        btnPastAttempts.setOnClickListener(v -> {
+            Intent intent = new Intent(mainActivity.this, PastAttemptsActivity.class);
+            startActivity(intent);
+        });
+
+        btnExit.setOnClickListener(v -> finish());
     }
 }

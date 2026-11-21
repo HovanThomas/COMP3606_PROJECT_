@@ -36,6 +36,7 @@
         <activity android:name=".Question9Activity" />
         <activity android:name=".Question10Activity" />
         <activity android:name=".SummaryActivity" />
+        <activity android:name=".PastAttemptsActivity" />
 
     </application>
 

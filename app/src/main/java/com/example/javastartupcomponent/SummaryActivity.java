@@ -35,6 +35,10 @@ public class SummaryActivity extends AppCompatActivity {
         playerPhone = intent.getStringExtra("PLAYER_PHONE");
         finalScore = intent.getIntExtra("CURRENT_SCORE", 0);
 
+        // Saves attempt to file using Person object
+        Person attemptPerson = new Person(playerName, playerPhone, finalScore);
+        FileStorage.saveAttempt(this, attemptPerson);
+
         // 2. Initialize Views
         TextView tvPlayerNameSummary = findViewById(R.id.tvPlayerNameSummary);
         TextView tvFinalScore = findViewById(R.id.tvFinalScore);
